@@ -1,14 +1,15 @@
 {
-  "name": "astro-blog-starter-template",
-  "compatibility_date": "2025-04-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "main": "./dist/_worker.js/index.js",
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
+  // ---- BASIC INFO ----
+  "name": "prairie-bright-solar",        // any slug-like name
+  "compatibility_date": "2025-06-10",
+
+  // ---- STATIC SITE OUTPUT ----
+  "site": {
+    "bucket": "./dist"                  // where `astro build` puts the files
   },
-  "observability": {
-    "enabled": true
-  },
-  "upload_source_maps": true
+
+  // ---- OPTIONAL: BUILD COMMAND ----
+  "build": {                            // Wrangler will run this first
+    "command": "npm run build"
+  }
 }
