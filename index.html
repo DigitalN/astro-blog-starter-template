@@ -123,24 +123,24 @@
 
         .form-container {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 15px;
             max-width: 400px;
             margin: 0 auto;
         }
 
-        input[type="email"] {
-            flex: 1;
+        input[type="text"], input[type="tel"] {
             padding: 12px 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
             outline: none;
-            background-color: white; /* Ensure input has white background */
+            background-color: white;
             position: relative;
-            z-index: 15; /* Make sure input is above everything */
+            z-index: 15;
         }
 
-        input[type="email"]:focus {
+        input[type="text"]:focus, input[type="tel"]:focus {
             border-color: #4CAF50;
         }
 
@@ -154,7 +154,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             position: relative;
-            z-index: 15; /* Make sure button is above everything */
+            z-index: 15;
         }
 
         button:hover:not(:disabled) {
@@ -189,11 +189,11 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 200px; /* Increased height to reach above "Coming Soon" */
-            background-color: #b3d9ff; /* Match the darker background */
+            height: 200px;
+            background-color: #b3d9ff;
             border-radius: 0 0 30px 30px;
-            z-index: 1; /* Put wave behind all content */
-            clip-path: ellipse(100% 60% at 50% 100%); /* Create a more natural wave shape */
+            z-index: 1;
+            clip-path: ellipse(100% 60% at 50% 100%);
         }
 
         @media (max-width: 600px) {
@@ -204,17 +204,9 @@
             h1 {
                 font-size: 36px;
             }
-            
-            .form-container {
-                flex-direction: column;
-            }
-            
-            button {
-                width: 100%;
-            }
 
             .wave {
-                height: 150px; /* Smaller wave on mobile */
+                height: 150px;
             }
 
             .logo {
@@ -222,7 +214,7 @@
             }
 
             .illustration img {
-                height:160px;
+                height: 160px;
                 max-width: 160px;
             }
         }
@@ -234,11 +226,9 @@
             <div class="logo">Prairie Bright Solar</div>
             <div class="social-links">
                 <span>Follow us</span>
-                <!-- <a href="#" aria-label="Facebook">f</a> -->
                 <a href="https://instagram.com/prairiebright" target="_blank" aria-label="Instagram">
                     <img src="Instagram.png" alt="Instagram">
                 </a>
-                <!-- <a href="#" aria-label="Twitter">🐦</a> -->
             </div>
         </header>
 
@@ -250,21 +240,27 @@
             <p class="coming-soon">-Coming Soon-</p>
             
             <div class="signup-section">
-                <h3>Sign Up For Early Access</h3>
-                <form id="emailForm" class="form-container">
+                <h3>Get A Free Solar Quote</h3>
+                <form id="contactForm" class="form-container">
                     <input 
-                        type="email" 
-                        id="email" 
-                        placeholder="Enter your email address" 
+                        type="text" 
+                        id="name" 
+                        placeholder="Enter your full name" 
                         required
                     >
-                    <button type="submit">Submit</button>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        placeholder="Enter your phone number" 
+                        required
+                    >
+                    <button type="submit">Get My Quote</button>
                 </form>
                 <div class="success-message" id="successMessage">
-                    Thank you! We'll be in touch soon about your solar installation.
+                    Thank you! We'll call you soon to discuss your solar installation.
                 </div>
                 <div class="error-message" id="errorMessage">
-                    Something went wrong. Please try again or contact us directly.
+                    Something went wrong. Please try again or call us directly.
                 </div>
             </div>
         </main>
@@ -273,10 +269,11 @@
     </div>
 
     <script>
-        document.getElementById('emailForm').addEventListener('submit', async function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
             const submitButton = e.target.querySelector('button');
@@ -290,13 +287,14 @@
             submitButton.disabled = true;
             
             try {
-                const response = await fetch('https://defaultc91d91f66b66489bb3238d8ad34fe3.e9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4a883f8d6e7a477e959cb3ab41e581bf/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-c91d91f6-6b66-489b-b323-8d8ad34fe3e9&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1kJjcZhX-pAvW-JCPGgvCA9u1svB6S1ZHNAYGDBkW7w', {
+                const response = await fetch('https://defaultc91d91f66b66489bb3238d8ad34fe3.e9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4a883f8d6e7a477e959cb3ab41e581bf/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-c91d91f6-6b66-489b-b323-8d8ad34fe3e9', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: email,
+                        name: name,
+                        phone: phone,
                         timestamp: new Date().toISOString(),
                         source: 'Prairie Bright Solar Landing Page',
                         location: 'Edmonton, Alberta',
@@ -306,7 +304,8 @@
                 
                 if (response.ok || response.status === 202) {
                     successMessage.style.display = 'block';
-                    document.getElementById('email').value = '';
+                    document.getElementById('name').value = '';
+                    document.getElementById('phone').value = '';
                 } else {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -315,7 +314,7 @@
                 errorMessage.style.display = 'block';
             } finally {
                 // Reset button
-                submitButton.textContent = 'Submit';
+                submitButton.textContent = 'Get My Quote';
                 submitButton.disabled = false;
             }
         });
