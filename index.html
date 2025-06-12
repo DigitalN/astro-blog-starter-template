@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #e6f2ff;
+            background-color: #b3d9ff; /* Darker shade of blue */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -37,6 +37,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 60px;
+            position: relative;
+            z-index: 10; /* Ensure header stays above wave */
         }
 
         .logo {
@@ -71,6 +73,8 @@
         .main-content {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
+            z-index: 10; /* Ensure content stays above wave */
         }
 
         .illustration {
@@ -88,6 +92,11 @@
             font-size: 24px;
             color: #666;
             margin-bottom: 40px;
+        }
+
+        .signup-section {
+            position: relative;
+            z-index: 10; /* Ensure form stays above wave */
         }
 
         .signup-section h3 {
@@ -111,6 +120,9 @@
             border-radius: 8px;
             font-size: 16px;
             outline: none;
+            background-color: white; /* Ensure input has white background */
+            position: relative;
+            z-index: 15; /* Make sure input is above everything */
         }
 
         input[type="email"]:focus {
@@ -126,6 +138,8 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
+            position: relative;
+            z-index: 15; /* Make sure button is above everything */
         }
 
         button:hover:not(:disabled) {
@@ -142,6 +156,8 @@
             margin-top: 20px;
             display: none;
             font-weight: bold;
+            position: relative;
+            z-index: 10;
         }
 
         .error-message {
@@ -149,6 +165,8 @@
             margin-top: 20px;
             display: none;
             font-weight: bold;
+            position: relative;
+            z-index: 10;
         }
 
         .wave {
@@ -156,9 +174,11 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 100px;
-            background-color: #e6f2ff;
+            height: 200px; /* Increased height to reach above "Coming Soon" */
+            background-color: #b3d9ff; /* Match the darker background */
             border-radius: 0 0 30px 30px;
+            z-index: 1; /* Put wave behind all content */
+            clip-path: ellipse(100% 60% at 50% 100%); /* Create a more natural wave shape */
         }
 
         @media (max-width: 600px) {
@@ -176,6 +196,10 @@
             
             button {
                 width: 100%;
+            }
+
+            .wave {
+                height: 150px; /* Smaller wave on mobile */
             }
         }
     </style>
