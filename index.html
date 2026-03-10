@@ -136,84 +136,38 @@
             line-height: 1.55;
         }
 
-        /* Contact form */
-        .signup-section {
+        /* Contact section */
+        .contact-section {
             text-align: center;
         }
 
-        .signup-section h2 {
+        .contact-section h2 {
             font-size: 22px;
             font-weight: 700;
             color: #0f2044;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
-        .signup-section p {
+        .contact-section p {
             font-size: 15px;
             color: #64748b;
             margin-bottom: 24px;
         }
 
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 420px;
-            margin: 0 auto;
-        }
-
-        input[type="text"],
-        input[type="email"] {
-            padding: 13px 18px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-            background-color: #fff;
-            color: #0f172a;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus {
-            border-color: #2563eb;
-        }
-
-        button {
+        .email-btn {
+            display: inline-block;
             background-color: #2563eb;
             color: white;
-            border: none;
-            padding: 14px 30px;
+            text-decoration: none;
+            padding: 14px 32px;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
             transition: background-color 0.2s;
         }
 
-        button:hover:not(:disabled) {
+        .email-btn:hover {
             background-color: #1d4ed8;
-        }
-
-        button:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        .success-message {
-            color: #16a34a;
-            margin-top: 18px;
-            display: none;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .error-message {
-            color: #dc2626;
-            margin-top: 18px;
-            display: none;
-            font-weight: 500;
-            font-size: 14px;
         }
 
         /* Footer stripe */
@@ -294,30 +248,10 @@
                 </div>
             </section>
 
-            <section class="signup-section">
+            <section class="contact-section">
                 <h2>Let's talk about your billing headaches.</h2>
-                <p>Leave your info and Keith will reach out to learn more about your MSP.</p>
-                <form id="contactForm" class="form-container">
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="Your name"
-                        required
-                    >
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Your email address"
-                        required
-                    >
-                    <button type="submit">Get in Touch</button>
-                </form>
-                <div class="success-message" id="successMessage">
-                    Thanks! Keith will be in touch shortly.
-                </div>
-                <div class="error-message" id="errorMessage">
-                    Something went wrong. Please try again or email keith@prairiebright.ca directly.
-                </div>
+                <p>Reach out directly — Keith reads every email.</p>
+                <a id="emailLink" class="email-btn" href="#">Email Keith</a>
             </section>
         </main>
 
@@ -325,63 +259,13 @@
     </div>
 
     <script>
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const successMessage = document.getElementById('successMessage');
-            const errorMessage = document.getElementById('errorMessage');
-            const submitButton = e.target.querySelector('button');
-
-            if (!name || !email) {
-                errorMessage.textContent = 'Please fill in both fields.';
-                errorMessage.style.display = 'block';
-                successMessage.style.display = 'none';
-                return;
-            }
-
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-
-            submitButton.textContent = 'Sending...';
-            submitButton.disabled = true;
-
-            const powerAutomateUrl = 'https://defaultc91d91f66b66489bb3238d8ad34fe3.e9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4a883f8d6e7a477e959cb3ab41e581bf/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentName=Default-c91d91f6-6b66-489b-b323-8d8ad34fe3e9&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1kJjcZhX-pAvW-JCPGgvCA9u1svB6S1ZHNAYGDBkW7w';
-
-            const payload = {
-                name: name,
-                email: email,
-                timestamp: new Date().toISOString(),
-                source: 'Prairie Bright MSP Billing Landing Page'
-            };
-
-            try {
-                const response = await fetch(powerAutomateUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    mode: 'cors',
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok || response.status === 202 || response.status === 201) {
-                    successMessage.style.display = 'block';
-                    document.getElementById('name').value = '';
-                    document.getElementById('email').value = '';
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-            } catch (error) {
-                errorMessage.textContent = 'Something went wrong. Please try again or email keith@prairiebright.ca directly.';
-                errorMessage.style.display = 'block';
-            } finally {
-                submitButton.textContent = 'Get in Touch';
-                submitButton.disabled = false;
-            }
-        });
+        // Assemble email at runtime so bots can't scrape it from the HTML
+        (function () {
+            var u = 'keith';
+            var d = 'prairiebright' + '.ca';
+            var link = document.getElementById('emailLink');
+            link.href = 'mailto:' + u + '@' + d;
+        })();
     </script>
 </body>
 </html>
